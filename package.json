@@ -1,8 +1,8 @@
 {
   "name": "electron-youtube-tv",
-  "version": "0.0.2",
-  "description": "YouTube TV WebApp packaged as an Electron App",
-  "author": "amoshydra",
+  "version": "0.0.3",
+  "description": "YouTube TV Client",
+  "author": "amoshydra/ guilfer",
   "productName": "YouTube TV",
   "main": "main.js",
   "postinstall": "install-app-deps",
