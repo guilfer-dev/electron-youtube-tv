@@ -1,46 +1,31 @@
 'use strict';
 
-const {app, BrowserWindow, webContents, session } = require('electron');
-const urlChecker = require('./libs/urlChecker');
-const tray = require('./controllers/tray');
+const { app, BrowserWindow, session } = require('electron');
+const path = require('path');
 
-app.on('ready', function() {
-  var mainWindow = new BrowserWindow({
-    title: 'Youtube TV',
-    width: 1240,
-    height: 720,
+app.on('ready', function () {
+  const win = new BrowserWindow({
+    width: 1920,
+    height: 1080,
+    autoHideMenuBar: true,
+    fullscreen: true,
     icon: __dirname + '/favicon.ico',
-    show: false
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js')
+    }
   });
-  mainWindow.setMenu(null);
-  tray.init(mainWindow);
 
   session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
-    details.requestHeaders['User-Agent'] = 'Mozilla/5.0 (SMART-TV; Linux; Tizen 2.4.0) AppleWebkit/538.1 (KHTML, like Gecko) SamsungBrowser/1.1 TV Safari/538.1';
+    details.requestHeaders['User-Agent'] = 'Mozilla/5.0 (SMART-TV; LINUX; Tizen 5.5) AppleWebKit/537.36 (KHTML, like Gecko) 69.0.3497.106.1/5.5 TV Safari/537.36';
     callback({ cancel: false, requestHeaders: details.requestHeaders });
   });
 
-  mainWindow.webContents.on('did-navigate-in-page', (event, url, isMainFrame) => {
-    urlChecker.init(url);
-
-    if (urlChecker.includePath('control')) {
-      mainWindow.minimize();
-      mainWindow.focus();
-      mainWindow.maximize();
-      mainWindow.setFullScreen(true);
-    }
-
-    if (urlChecker.includePath("browse-sets")) {
-      mainWindow.setFullScreen(false);
-    }
-  });
-
-  mainWindow.on('close', (e) => {
+  win.on('close', (e) => {
     e.preventDefault();
-    mainWindow.hide();
-    mainWindow.setSkipTaskbar(true);
+    win.hide();
+    win.setSkipTaskbar(true);
   });
 
-  mainWindow.loadURL('https://www.youtube.com/tv');
+  win.loadURL('https://www.youtube.com/tv');
 
 });

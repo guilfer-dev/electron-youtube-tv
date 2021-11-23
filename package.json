@@ -16,9 +16,10 @@
     "appId": "com.amoshydra.electron.youtubetv"
   },
   "license": "ISC",
-  "dependencies": {},
   "devDependencies": {
-    "electron": "^11.3.0",
     "electron-builder": "^22.9.1"
+  },
+  "dependencies": {
+    "electron": "^16.0.1"
   }
 }
